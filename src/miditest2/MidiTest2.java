@@ -54,6 +54,8 @@ public class MidiTest2 {
         
         channels[i%15].noteOn(note, volume);
         JButton b = new JButton();
+        b.setBorderPainted(false);
+        b.setOpaque(true);
         f.notecards.add(b);
          f.notecards.get(i).setBounds( volume*13 + 40, 800-(note*9), 20, 20);
          f.setColor(f.notecards.get(i), note);
