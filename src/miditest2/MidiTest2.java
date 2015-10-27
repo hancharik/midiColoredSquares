@@ -34,8 +34,8 @@ public class MidiTest2 {
         
         f = new MidiFrame();
         
-        
-        
+        int instrument;
+        int bank;
         int note;
         int volume;
         int pause;
@@ -46,13 +46,32 @@ public class MidiTest2 {
 
         MidiChannel[] channels = synthesizer.getChannels();
 
-        for(int i = 0; i < 11110; i++){
-         note = (int) (Math.random() * 110) + 1; 
-         pause = (int) (Math.random() * 1) + 1; 
-         volume = (int) (Math.random() * 110) + 1;
-             
         
-        channels[i%15].noteOn(note, volume);
+        /*
+        
+        MidiChannel channel = synthesizer.getChannels()[0];
+if (channel != null) {
+    channel.programChange(bank, instrument);
+    channel.noteOn(70, 100);
+}
+        
+        
+        */
+        
+        for(int j = 0; j < 100; j++){
+        for(int i = 0; i < 100; i++){
+        for(int k = 10; k < 100; k=k+50){    
+         note = (int) (Math.random() * 110) + 1; 
+         pause = 20;//(int) (Math.random() * 800) + 200; 
+         volume = (int) (Math.random() * 110) + 1;
+         instrument = (int) (Math.random() * 25) + 1;
+        bank = (int) (Math.random() * 10) + 1;   
+         
+         
+         // bank zero, instrument 25 is the 808
+        channels[0].programChange(j , i );
+        channels[0].noteOn( note, volume);
+       
         JButton b = new JButton();
         b.setBorderPainted(false);
         b.setOpaque(true);
@@ -64,9 +83,42 @@ public class MidiTest2 {
           f.p.repaint();
           //f.pack();
         Thread.sleep(pause);
-        channels[i%15].noteOff(note);
+        channels[0].noteOff(note);
+        }
+        }
+            }
+        
+        /*
+           for(int i = 0; i < 100; i++){
+            
+         note = (int) (Math.random() * 110) + 1; 
+         pause = (int) (Math.random() * 300) + 100; 
+         volume = (int) (Math.random() * 110) + 1;
+         instrument = (int) (Math.random() * 25) + 1;
+        bank = (int) (Math.random() * 10) + 1;   
+         
+         
+         // bank zero, instrument 25 is the 808
+        channels[0].programChange(bank , instrument );
+        channels[0].noteOn(note, volume);
+       
+        JButton b = new JButton();
+        b.setBorderPainted(false);
+        b.setOpaque(true);
+        f.notecards.add(b);
+         f.notecards.get(i).setBounds( volume*11, 900-(note*9), 20, 20);
+         f.setColor(f.notecards.get(i), note);
+         
+          f.p.add(b);
+          f.p.repaint();
+          //f.pack();
+        Thread.sleep(pause);
+        channels[0].noteOff(note);
         
         }
+         */  
+           
+           
         synthesizer.close();
     } catch (Exception e)
     {

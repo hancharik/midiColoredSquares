@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 /**
  *
@@ -20,6 +21,9 @@ public class MidiFrame extends JFrame{
      ArrayList <JButton> notecards = new ArrayList();
         
         JPanel p = new JPanel();
+    JLabel iLabel;
+    JLabel jLabel;
+    JLabel kLabel;
     
     
     
@@ -30,7 +34,7 @@ public class MidiFrame extends JFrame{
            
            
             
-		super ("Midi Notes");
+		super ("MIDI sound dojo");
                 
                  notecards = new ArrayList();
                 
@@ -50,7 +54,13 @@ public class MidiFrame extends JFrame{
        
        
   public void addComponents(){
-      
+           
+     // iLabel = new JLabel("i"):
+    
+       //     jLabel;
+    
+   // kLabel;
+
          notecards = new ArrayList();
          p = new JPanel();
         setSize (1200, 1000);
