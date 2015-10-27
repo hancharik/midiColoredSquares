@@ -154,19 +154,19 @@ if (channel != null) {
         
         */
         
-        for(int j = 0; j < 10; j++){
-        for(int i = 0; i < 10; i++){
-        for(int k = 110; k < 128; k++){    
-         note = (int) (Math.random() * 100) + 1; 
-         note1 = (int) (Math.random() * 100) + 1; 
-         pause = (int) (Math.random() * 1200) + 1; 
+        for(int j = 0; j < 1; j++){
+        for(int i = 0; i < 100; i++){
+        for(int k = 0; k < 8; k++){    
+         note = (int) (Math.random() * 60) + 10; 
+         note1 = note + (int) (Math.random() * 20) + 1; 
+         pause = (int) (Math.random() * 1400) + 1000; 
          volume = (int) (Math.random() * 10) + 70;
-         instrument = (int) (Math.random() * 125) + 1;
+         instrument = (int) (Math.random() * 7) + 8;
         bank = (int) (Math.random() * 10) + 1;   
          
          
          // bank zero, instrument 25 is the 808
-        channels[0].programChange(1024 ,instrument );
+        channels[0].programChange(0 ,instrument );
         channels[0].noteOn( note, volume);
        
         JButton b = new JButton();
@@ -176,12 +176,12 @@ if (channel != null) {
          this.notecards.get(i).setBounds( volume*11, 900-(note*9), 20, 20);
          this.setColor(this.notecards.get(i), note);
          this.p.add(b);
-         channels[1].programChange(0 ,instrument);
+         channels[1].programChange(0 ,(int) (Math.random() * 7) + 8);
         channels[1].noteOn( note1, volume);
-         this.iLabel.setText("<html><h2><font color='white'>instrument = </font><font color='yellow'>" + (114 + i) + "</font><h2></html>");
+         this.iLabel.setText("<html><h2><font color='white'>instrument = </font><font color='yellow'>" + instrument + "</font><h2></html>");
       // http://www.java2s.com/Tutorial/Java/0240__Swing/SetFontandforegroundcolorforaJLabel.htm
          this.iLabel.setFont(new Font("Courier New", Font.BOLD, 22));
-         this.jLabel.setText("<html><h2><font 'times new roman'color='white'>bank = </font><font color='blue'>"  + 0 + "</font><h2></html>");
+         this.jLabel.setText("<html><h2><font 'times new roman'color='white'>k = </font><font color='blue'>"  + k + "</font><h2></html>");
          this.jLabel.setFont(new Font("Courier New", Font.BOLD, 22));
         this.kLabel.setText("<html><h2><font color='white'>note = </font><font color='green'>"  +  note + "</font><h2></html>");
         this.kLabel.setFont(new Font("Courier New", Font.BOLD, 22));
