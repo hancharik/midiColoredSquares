@@ -46,10 +46,10 @@ public class MidiTest2 {
 
         MidiChannel[] channels = synthesizer.getChannels();
 
-        for(int i = 0; i < 4000; i++){
-         note = (int) (Math.random() * 80) + 1; 
-         pause = (int) (Math.random() * 1900) + 100; 
-         volume = (int) (Math.random() * 80) + 1;
+        for(int i = 0; i < 11110; i++){
+         note = (int) (Math.random() * 110) + 1; 
+         pause = (int) (Math.random() * 1) + 1; 
+         volume = (int) (Math.random() * 110) + 1;
              
         
         channels[i%15].noteOn(note, volume);
@@ -57,14 +57,14 @@ public class MidiTest2 {
         b.setBorderPainted(false);
         b.setOpaque(true);
         f.notecards.add(b);
-         f.notecards.get(i).setBounds( volume*13 + 40, 800-(note*9), 20, 20);
+         f.notecards.get(i).setBounds( volume*11, 900-(note*9), 20, 20);
          f.setColor(f.notecards.get(i), note);
          
           f.p.add(b);
           f.p.repaint();
           //f.pack();
         Thread.sleep(pause);
-        channels[i%15].noteOff(60);
+        channels[i%15].noteOff(note);
         
         }
         synthesizer.close();
