@@ -60,10 +60,10 @@ if (channel != null) {
         
         for(int j = 0; j < 100; j++){
         for(int i = 0; i < 100; i++){
-        for(int k = 10; k < 100; k=k+6){    
+        for(int k = 10; k < 100; k++){    
          note = (int) (Math.random() * 110) + 1; 
-         pause = (int) (Math.random() * 1800) + 200; 
-         volume = (int) (Math.random() * 80) + 30;
+         pause = (int) (Math.random() * 1800) + 1; 
+         volume = (int) (Math.random() * 60) + 30;
          instrument = (int) (Math.random() * 25) + 1;
         bank = (int) (Math.random() * 10) + 1;   
          
