@@ -60,16 +60,16 @@ if (channel != null) {
         
         for(int j = 0; j < 100; j++){
         for(int i = 0; i < 100; i++){
-        for(int k = 10; k < 100; k=k+50){    
+        for(int k = 10; k < 100; k=k+6){    
          note = (int) (Math.random() * 110) + 1; 
-         pause = 20;//(int) (Math.random() * 800) + 200; 
-         volume = (int) (Math.random() * 110) + 1;
+         pause = (int) (Math.random() * 1800) + 200; 
+         volume = (int) (Math.random() * 80) + 30;
          instrument = (int) (Math.random() * 25) + 1;
         bank = (int) (Math.random() * 10) + 1;   
          
          
          // bank zero, instrument 25 is the 808
-        channels[0].programChange(j , i );
+        channels[0].programChange((int) (Math.random() * 25) + 1 , (int) (Math.random() * 25) + 1 );
         channels[0].noteOn( note, volume);
        
         JButton b = new JButton();
