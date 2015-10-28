@@ -5,14 +5,30 @@
  */
 package miditest2;
 
+
+
+
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.sound.midi.Instrument;
+import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiChannel;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Synthesizer;
+import javax.sound.midi.Sequencer;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -31,11 +47,11 @@ public class MidiFrame extends JFrame{
     
      ArrayList <JButton> notecards = new ArrayList();
         
-        JPanel p = new JPanel();
+    JPanel p = new JPanel();
     JLabel iLabel;
     JLabel jLabel;
     JLabel kLabel;
-    
+    JButton showInstruments;
     
     
     
@@ -66,12 +82,27 @@ public class MidiFrame extends JFrame{
        
   public void addComponents(){
            
-        iLabel = new JLabel("<html><h2><font color='white'>X Velocity = </font><font color='red'>" + "</font><h2></html>");
-        jLabel = new JLabel("<html><h2><font color='white'>X Velocity = </font><font color='red'>"  + "</font><h2></html>");
-        kLabel = new JLabel("<html><h2><font color='white'>X Velocity = </font><font color='red'>"  + "</font><h2></html>");
+        iLabel = new JLabel();
+        jLabel = new JLabel();
+        kLabel = new JLabel();
         iLabel.setBounds(20, 60, 300, 60);
         jLabel.setBounds(20, 140, 300, 60);
         kLabel.setBounds(20, 240, 300, 68);
+        showInstruments = new JButton("show instruments");
+        showInstruments.setBounds(20, 20, 160, 40);
+   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////     
+        showInstruments.addActionListener(new ActionListener() {
+ //http://www.javaprogrammingforums.com/java-swing-tutorials/278-how-add-actionlistener-jbutton-swing.html
+            public void actionPerformed(ActionEvent e)
+            {
+             // showAvailableInstruments();
+                //playRandomStuff();
+                playMidiSong();
+            }
+
+            
+        });
+    /////////////////////////////////////////////////////////////////////////////////////////    
          notecards = new ArrayList();
          p = new JPanel();
         setSize (1200, 1000);
@@ -85,7 +116,7 @@ public class MidiFrame extends JFrame{
         p.add(iLabel);
         p.add(jLabel);
         p.add(kLabel);
-        
+        p.add(showInstruments);
       
       
   }     
@@ -151,24 +182,42 @@ if (channel != null) {
     channel.noteOn(70, 100);
 }
         
-        
         */
         
+        
         for(int j = 0; j < 1; j++){
-        for(int i = 0; i < 100; i++){
-        for(int k = 0; k < 8; k++){    
-         note = (int) (Math.random() * 60) + 10; 
-         note1 = note + (int) (Math.random() * 20) + 1; 
-         pause = (int) (Math.random() * 1400) + 1000; 
+        for(int i = 0; i < 1; i++){
+        for(int k = 0; k < 7; k++){    
+         
+         note1 = (int) (Math.random() * 110) + 1; 
+         note =  (int) (Math.random() * 78 ) + 12; 
+         
+         pause = 400;//(int) (Math.random() * 400) + 1; 
          volume = (int) (Math.random() * 10) + 70;
-         instrument = (int) (Math.random() * 7) + 8;
+         instrument = 384;//(int) (Math.random() * 124) + 1;
         bank = (int) (Math.random() * 10) + 1;   
          
          
-         // bank zero, instrument 25 is the 808
-        channels[0].programChange(0 ,instrument );
+        
+        
+        
+        this.iLabel.setText("<html><h2><font color='white'>instrument = </font><font color='yellow'>" + instrument + "</font><h2></html>");
+      // http://www.java2s.com/Tutorial/Java/0240__Swing/SetFontandforegroundcolorforaJLabel.htm
+         this.iLabel.setFont(new Font("Courier New", Font.BOLD, 12));
+         this.jLabel.setText("<html><h2><font 'times new roman'color='white'>beat = </font><font color='blue'>"  + k + "</font><h2></html>");
+         this.jLabel.setFont(new Font("Courier New", Font.BOLD, 22));
+        this.kLabel.setText("<html><h2><font color='white'>note = </font><font color='green'>"  +  note + "</font><h2></html>");
+        this.kLabel.setFont(new Font("Courier New", Font.BOLD, 22));
+        
+        
+        
+        
+        
+        
+        //if(k%2==0){
+        channels[0].programChange(bank ,instrument );
         channels[0].noteOn( note, volume);
-       
+      //  }
         JButton b = new JButton();
         b.setBorderPainted(false);
         b.setOpaque(true);
@@ -176,15 +225,9 @@ if (channel != null) {
          this.notecards.get(i).setBounds( volume*11, 900-(note*9), 20, 20);
          this.setColor(this.notecards.get(i), note);
          this.p.add(b);
-         channels[1].programChange(0 ,(int) (Math.random() * 7) + 8);
-        channels[1].noteOn( note1, volume);
-         this.iLabel.setText("<html><h2><font color='white'>instrument = </font><font color='yellow'>" + instrument + "</font><h2></html>");
-      // http://www.java2s.com/Tutorial/Java/0240__Swing/SetFontandforegroundcolorforaJLabel.htm
-         this.iLabel.setFont(new Font("Courier New", Font.BOLD, 22));
-         this.jLabel.setText("<html><h2><font 'times new roman'color='white'>k = </font><font color='blue'>"  + k + "</font><h2></html>");
-         this.jLabel.setFont(new Font("Courier New", Font.BOLD, 22));
-        this.kLabel.setText("<html><h2><font color='white'>note = </font><font color='green'>"  +  note + "</font><h2></html>");
-        this.kLabel.setFont(new Font("Courier New", Font.BOLD, 22));
+         channels[1].programChange(bank ,instrument);
+        channels[1].noteOn( note - 11, volume);
+         
           JButton bz = new JButton();
         bz.setBorderPainted(false);
         bz.setOpaque(true);
@@ -196,11 +239,13 @@ if (channel != null) {
           //this.pack();
         Thread.sleep(pause);
         channels[0].noteOff(note);
-        channels[1].noteOff(note1);
+        //channels[1].noteOff(note1);
         }
         }
             }
         
+        
+       // */
         /*
            for(int i = 0; i < 100; i++){
             
@@ -241,7 +286,7 @@ if (channel != null) {
   
      
      
-       public void showAvailableInstruments() throws MidiUnavailableException {
+       public void showAvailableInstruments() {
            try{
         Synthesizer synthesizer = MidiSystem.getSynthesizer();
         synthesizer.open();
@@ -272,9 +317,47 @@ if (channel != null) {
     {
         e.printStackTrace();
     }
-    }  
+    } // end show available instruments 
      
-       
+  public void playMidiSong(){
+      
+      InputStream is = null;  
+         try {
+             Sequencer sequencer = null;
+             try {
+                 sequencer = MidiSystem.getSequencer();
+             } catch (MidiUnavailableException ex) {
+                 Logger.getLogger(MidiFrame.class.getName()).log(Level.SEVERE, null, ex);
+             }
+             try {
+                 sequencer.open();
+             } catch (MidiUnavailableException ex) {
+                 Logger.getLogger(MidiFrame.class.getName()).log(Level.SEVERE, null, ex);
+         }
+             is = new BufferedInputStream(new FileInputStream(new File("midi/SlowRide.mid")));
+          try {
+              sequencer.setSequence(is);
+          } catch (IOException ex) {
+              Logger.getLogger(MidiFrame.class.getName()).log(Level.SEVERE, null, ex);
+          } catch (InvalidMidiDataException ex) {
+              Logger.getLogger(MidiFrame.class.getName()).log(Level.SEVERE, null, ex);
+          }
+             sequencer.start();
+         } // end
+ catch (FileNotFoundException ex) {
+             Logger.getLogger(MidiFrame.class.getName()).log(Level.SEVERE, null, ex);
+         } finally {
+             try {
+                 is.close();
+             } catch (IOException ex) {
+                 Logger.getLogger(MidiFrame.class.getName()).log(Level.SEVERE, null, ex);
+             }
+         }
+  
+  
+  
+  
+  }
        
        
 } // end

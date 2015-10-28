@@ -37,8 +37,8 @@ public class MidiTest2 {
         
         
         f = new MidiFrame();
-        f.showAvailableInstruments();
-        f.playRandomStuff();
+        //f.showAvailableInstruments();
+        //f.playRandomStuff();
         
     }
 
