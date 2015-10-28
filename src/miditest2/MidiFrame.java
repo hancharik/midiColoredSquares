@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package miditest2;
+package space;
 
 
 
@@ -30,6 +30,7 @@ import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Synthesizer;
 import javax.sound.midi.Sequencer;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -37,6 +38,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -52,8 +54,14 @@ public class MidiFrame extends JFrame{
     JLabel jLabel;
     JLabel kLabel;
     JButton showInstruments;
-    
-    
+    JButton playRandom;
+    JButton playSong;
+    JButton stopSong;
+    JButton chooseSong;
+    String songName = "MachineGun(Live)";
+     Sequencer sequencer = null;
+            
+                 
     
        public MidiFrame (){
             
@@ -63,6 +71,12 @@ public class MidiFrame extends JFrame{
             
 		super ("MIDI sound dojo");
                 addComponents();
+                
+                //sequencer = null;
+                
+                 
+                
+                
                  notecards = new ArrayList();
                 
                  p.setBackground(Color.black);
@@ -80,6 +94,16 @@ public class MidiFrame extends JFrame{
 	}  // end constructor
        
        
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
   public void addComponents(){
            
         iLabel = new JLabel();
@@ -95,14 +119,101 @@ public class MidiFrame extends JFrame{
  //http://www.javaprogrammingforums.com/java-swing-tutorials/278-how-add-actionlistener-jbutton-swing.html
             public void actionPerformed(ActionEvent e)
             {
-             // showAvailableInstruments();
+              showAvailableInstruments();
                 //playRandomStuff();
-                playMidiSong();
+               // playMidiSong();
             }
 
             
         });
     /////////////////////////////////////////////////////////////////////////////////////////    
+        
+                 playRandom = new JButton("play random");
+         playRandom.setBounds(200, 20, 160, 40);
+   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////     
+         playRandom.addActionListener(new ActionListener() {
+ //http://www.javaprogrammingforums.com/java-swing-tutorials/278-how-add-actionlistener-jbutton-swing.html
+            public void actionPerformed(ActionEvent e)
+            {
+             // showAvailableInstruments();
+                playRandomStuff();
+                //playMidiSong();
+            }
+
+            
+        });
+    ///////////////////////////////////////////////////////////////////////////////////////// 
+        
+                playSong = new JButton("play song");
+        playSong.setBounds(400, 20, 160, 40);
+        playSong.setVisible(false);
+   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////     
+        playSong.addActionListener(new ActionListener() {
+ //http://www.javaprogrammingforums.com/java-swing-tutorials/278-how-add-actionlistener-jbutton-swing.html
+            public void actionPerformed(ActionEvent e)
+            {
+                try {
+                    // showAvailableInstruments();
+                    //playRandomStuff();
+                    playSong.setVisible(false);
+                    stopSong.setVisible(true);
+                    playMidiSong();
+                } catch (MidiUnavailableException ex) {
+                    Logger.getLogger(MidiFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(MidiFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InvalidMidiDataException ex) {
+                    Logger.getLogger(MidiFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            
+        });
+    ///////////////////////////////////////////////////////////////////////////////////////// 
+        
+        
+                
+                stopSong = new JButton("stop song");
+        stopSong.setBounds(600, 20, 160, 40);
+        stopSong.setVisible(false);
+   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////     
+        stopSong.addActionListener(new ActionListener() {
+ //http://www.javaprogrammingforums.com/java-swing-tutorials/278-how-add-actionlistener-jbutton-swing.html
+            public void actionPerformed(ActionEvent e)
+            {
+               
+                  
+                    stopSong.setVisible(false);
+                    chooseSong.setVisible(true);
+                     sequencer.close();
+                            
+              
+            }
+
+            
+        });
+    ///////////////////////////////////////////////////////////////////////////////////////// 
+   
+        
+        
+                   ///////////////////////////////////////////////////////////////////////////////////////// 
+        
+                chooseSong = new JButton("choose song");
+        chooseSong.setBounds(600, 20, 160, 40);
+   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////     
+        chooseSong.addActionListener(new ActionListener() {
+ //http://www.javaprogrammingforums.com/java-swing-tutorials/278-how-add-actionlistener-jbutton-swing.html
+            public void actionPerformed(ActionEvent e)
+            {
+             // showAvailableInstruments();
+                //playRandomStuff();
+                showChooser();
+            }
+
+            
+        });
+    ///////////////////////////////////////////////////////////////////////////////////////// 
+        
          notecards = new ArrayList();
          p = new JPanel();
         setSize (1200, 1000);
@@ -117,6 +228,10 @@ public class MidiFrame extends JFrame{
         p.add(jLabel);
         p.add(kLabel);
         p.add(showInstruments);
+        p.add(playRandom);
+        p.add(playSong);
+        p.add(stopSong);
+        p.add(chooseSong);
       
       
   }     
@@ -155,14 +270,11 @@ public void setColor(JButton buttonToColor, int level){
                  
          }
     
-}       
+}   // end set color    
        
  public void playRandomStuff(){
      
-                int instrument;
-        int bank;
-        int note;
-        int note1;
+         int note;
         int volume;
         int pause;
         int yAxis;
@@ -172,117 +284,32 @@ public void setColor(JButton buttonToColor, int level){
 
         MidiChannel[] channels = synthesizer.getChannels();
 
+        for(int i = 0; i < 4000; i++){
+         note = (int) (Math.random() * 80) + 1; 
+         pause = (int) (Math.random() * 1900) + 100; 
+         volume = (int) (Math.random() * 80) + 1;
+             
         
-        /*
-        //http://stackoverflow.com/questions/30718831/midi-midimessage-program-change-with-instrument-from-different-bank
-      
-        MidiChannel channel = synthesizer.getChannels()[0];
-if (channel != null) {
-    channel.programChange(bank, instrument);
-    channel.noteOn(70, 100);
-}
-        
-        */
-        
-        
-        for(int j = 0; j < 1; j++){
-        for(int i = 0; i < 1; i++){
-        for(int k = 0; k < 7; k++){    
-         
-         note1 = (int) (Math.random() * 110) + 1; 
-         note =  (int) (Math.random() * 78 ) + 12; 
-         
-         pause = 400;//(int) (Math.random() * 400) + 1; 
-         volume = (int) (Math.random() * 10) + 70;
-         instrument = 384;//(int) (Math.random() * 124) + 1;
-        bank = (int) (Math.random() * 10) + 1;   
-         
-         
-        
-        
-        
-        this.iLabel.setText("<html><h2><font color='white'>instrument = </font><font color='yellow'>" + instrument + "</font><h2></html>");
-      // http://www.java2s.com/Tutorial/Java/0240__Swing/SetFontandforegroundcolorforaJLabel.htm
-         this.iLabel.setFont(new Font("Courier New", Font.BOLD, 12));
-         this.jLabel.setText("<html><h2><font 'times new roman'color='white'>beat = </font><font color='blue'>"  + k + "</font><h2></html>");
-         this.jLabel.setFont(new Font("Courier New", Font.BOLD, 22));
-        this.kLabel.setText("<html><h2><font color='white'>note = </font><font color='green'>"  +  note + "</font><h2></html>");
-        this.kLabel.setFont(new Font("Courier New", Font.BOLD, 22));
-        
-        
-        
-        
-        
-        
-        //if(k%2==0){
-        channels[0].programChange(bank ,instrument );
-        channels[0].noteOn( note, volume);
-      //  }
+        channels[i%15].noteOn(note, volume);
         JButton b = new JButton();
-        b.setBorderPainted(false);
-        b.setOpaque(true);
-        this.notecards.add(b);
-         this.notecards.get(i).setBounds( volume*11, 900-(note*9), 20, 20);
-         this.setColor(this.notecards.get(i), note);
-         this.p.add(b);
-         channels[1].programChange(bank ,instrument);
-        channels[1].noteOn( note - 11, volume);
+        notecards.add(b);
+         notecards.get(i).setBounds( volume*13 + 40, 800-(note*9), 20, 20);
+         setColor(notecards.get(i), note);
          
-          JButton bz = new JButton();
-        bz.setBorderPainted(false);
-        bz.setOpaque(true);
-        this.notecards.add(bz);
-         this.notecards.get(i+1).setBounds( volume*10, 900-(note1*8), 20, 20);
-         this.setColor(this.notecards.get(i+1), note1);
-         this.p.add(bz);
-          this.p.repaint();
-          //this.pack();
+          p.add(b);
+          p.repaint();
+          //f.pack();
         Thread.sleep(pause);
-        channels[0].noteOff(note);
-        //channels[1].noteOff(note1);
-        }
-        }
-            }
-        
-        
-       // */
-        /*
-           for(int i = 0; i < 100; i++){
-            
-         note = (int) (Math.random() * 110) + 1; 
-         pause = (int) (Math.random() * 300) + 100; 
-         volume = (int) (Math.random() * 110) + 1;
-         instrument = (int) (Math.random() * 25) + 1;
-        bank = (int) (Math.random() * 10) + 1;   
-         
-         
-         // bank zero, instrument 25 is the 808
-        channels[0].programChange(bank , instrument );
-        channels[0].noteOn(note, volume);
-       
-        JButton b = new JButton();
-        b.setBorderPainted(false);
-        b.setOpaque(true);
-        this.notecards.add(b);
-         this.notecards.get(i).setBounds( volume*11, 900-(note*9), 20, 20);
-         this.setColor(this.notecards.get(i), note);
-         
-          this.p.add(b);
-          this.p.repaint();
-          //this.pack();
-        Thread.sleep(pause);
-        channels[0].noteOff(note);
+        channels[i%15].noteOff(60);
         
         }
-         */  
-           
-           
         synthesizer.close();
     } catch (Exception e)
     {
         e.printStackTrace();
     }
     }
+  
   
      
      
@@ -319,45 +346,81 @@ if (channel != null) {
     }
     } // end show available instruments 
      
-  public void playMidiSong(){
+       
+       
+       
+       
+       
+       
+       
+       
+       
+  public void playMidiSong() throws MidiUnavailableException, FileNotFoundException, IOException, InvalidMidiDataException{
       
-      InputStream is = null;  
-         try {
-             Sequencer sequencer = null;
-             try {
-                 sequencer = MidiSystem.getSequencer();
-             } catch (MidiUnavailableException ex) {
-                 Logger.getLogger(MidiFrame.class.getName()).log(Level.SEVERE, null, ex);
-             }
-             try {
-                 sequencer.open();
-             } catch (MidiUnavailableException ex) {
-                 Logger.getLogger(MidiFrame.class.getName()).log(Level.SEVERE, null, ex);
-         }
-             is = new BufferedInputStream(new FileInputStream(new File("midi/SlowRide.mid")));
-          try {
-              sequencer.setSequence(is);
-          } catch (IOException ex) {
-              Logger.getLogger(MidiFrame.class.getName()).log(Level.SEVERE, null, ex);
-          } catch (InvalidMidiDataException ex) {
-              Logger.getLogger(MidiFrame.class.getName()).log(Level.SEVERE, null, ex);
-          }
-             sequencer.start();
-         } // end
- catch (FileNotFoundException ex) {
-             Logger.getLogger(MidiFrame.class.getName()).log(Level.SEVERE, null, ex);
-         } finally {
-             try {
-                 is.close();
-             } catch (IOException ex) {
-                 Logger.getLogger(MidiFrame.class.getName()).log(Level.SEVERE, null, ex);
-             }
-         }
+      
+      InputStream is = null; 
+      
+      // sequencer = MidiSystem.getSequencer();
+       //  if( sequencer.isRunning()){
+         
+      //     sequencer.close();
+      //  }
+          
+       
+            sequencer = MidiSystem.getSequencer();
+            sequencer.open();
+            is = new BufferedInputStream(new FileInputStream(new File("midi/" + songName)));// + ".mid")));
+            sequencer.setSequence(is);
+            sequencer.start();
+            is.close();
+            
+      
+   } // end play midi song
   
   
   
+ 
+       
+   
   
+  
+      
+   public void showChooser(){  // this is from the example marc linked to in the google drive
+      
+                      JFileChooser  chooser = new JFileChooser(); 
+    chooser.setCurrentDirectory(new java.io.File("./midi/"));
+       FileNameExtensionFilter filter = new FileNameExtensionFilter(
+        "MIDI files", "mid");
+    chooser.setFileFilter(filter);
+    chooser.setDialogTitle("pick a song");
+    chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+    //
+    // disable the "All files" option.
+    //
+    chooser.setAcceptAllFileFilterUsed(false);
+    //    
+    if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) { 
+      chooseSong.setVisible(false);
+      playSong.setVisible(true);
+      songName = chooser.getSelectedFile().getName();
+      }
+    else {
+      System.out.println("No Selection ");
+      }
   }
-       
-       
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 } // end
