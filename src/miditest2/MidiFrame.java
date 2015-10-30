@@ -373,7 +373,7 @@ public void setColor(JButton buttonToColor, int level){
             sequencer.setSequence(is);
             sequencer.start();
             is.close();
-            
+            this.dispose();
       
    } // end play midi song
   
