@@ -35,8 +35,9 @@ public class MidiTest2 {
     public static void main(String[] args) throws MidiUnavailableException {
         
         
-        
-        f = new MidiFrame();
+       
+      f = new MidiFrame();
+       Aframe a = new Aframe();
         //f.showAvailableInstruments();
         //f.playRandomStuff();
         
