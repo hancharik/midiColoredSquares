@@ -15,6 +15,8 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
@@ -22,6 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.sound.midi.ControllerEventListener;
 import javax.sound.midi.Instrument;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiChannel;
@@ -29,6 +32,7 @@ import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Synthesizer;
 import javax.sound.midi.Sequencer;
+import javax.sound.midi.ShortMessage;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -49,7 +53,8 @@ public class MidiFrame extends JFrame{
     
      ArrayList <JButton> notecards = new ArrayList();
         
-    JPanel p = new JPanel();
+    //JPanel p = new JPanel();
+    MyDrawPanel p;// = new MyDrawPanel();
     JLabel iLabel;
     JLabel jLabel;
     JLabel kLabel;
@@ -70,12 +75,12 @@ public class MidiFrame extends JFrame{
            
             
 		super ("MIDI sound dojo");
-                addComponents();
+               
                 
                 //sequencer = null;
                 
-                 
-                
+                  p = new MyDrawPanel();
+                 addComponents();
                 
                  notecards = new ArrayList();
                 
@@ -215,7 +220,7 @@ public class MidiFrame extends JFrame{
     ///////////////////////////////////////////////////////////////////////////////////////// 
         
          notecards = new ArrayList();
-         p = new JPanel();
+         p = new MyDrawPanel();
         setSize (1200, 1000);
          p.setLayout(null);
          p.setBackground(Color.blue);
@@ -373,7 +378,7 @@ public void setColor(JButton buttonToColor, int level){
             sequencer.setSequence(is);
             sequencer.start();
             is.close();
-            this.dispose();
+           // this.dispose();
       
    } // end play midi song
   
@@ -411,7 +416,39 @@ public void setColor(JButton buttonToColor, int level){
  
   
   
-  
+  class MyDrawPanel extends JPanel implements ControllerEventListener {
+      
+      // only if we got an event do we want to paint
+      boolean msg = false;
+
+      public void controlChange(ShortMessage event) {
+         msg = true;       
+         repaint();         
+      }
+
+      public void paintComponent(Graphics g) {
+       if (msg) {
+            
+         Graphics2D g2 = (Graphics2D) g;
+
+         int r = (int) (Math.random() * 250);
+         int gr = (int) (Math.random() * 250);
+         int b = (int) (Math.random() * 250);
+
+         g.setColor(new Color(r,gr,b));
+
+         int ht = (int) ((Math.random() * 120) + 10);
+         int width = (int) ((Math.random() * 120) + 10);
+
+         int x = (int) ((Math.random() * 400) + 1);
+         int y = (int) ((Math.random() * 400) + 1);
+         
+         g.fillRect(x,y,ht, width);
+         msg = false;
+
+       } // close if
+     } // close method
+   }  // close inner class 
   
   
   
